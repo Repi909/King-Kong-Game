@@ -3,39 +3,42 @@
 
 #include <iostream>
 #include <string.h>
+#include <conio.h>
 
-class KBMInput: public Projectile, Plane{
-    private:
-        enum action{ UP='w', DOWN ='s', SHOOT = 'e'};
+class KBMInput{                                                 //Unbuffered keyboard input from conio.h using the getch() method. Enumerated values for referencing later in code.
+
+    protected:
+        enum action{ UP='w', DOWN ='s', SHOOT = 'e'};           //Enum cases for UP, DOWN, SHOOT
+        action Action;
+
+
 
     public:
-        void planeAction(enum action){
-            if(action == UP){
-                if(get_pPos() == 15){
-                    Plane::pPos;
-                }
-                Plane::pPos++;
+
+        action setKBMInput(){                                   //Method to return KBM input when called upon in inherited classes.
+
+            char input = getch();
+            if(input == 'w'){
+                Action = UP;
             }
-            else if(action == DOWN){
-                if(get_pPos() == 0){
-                    Plane::pPos;
-                }
-                Plane::pPos--;
+            else if(input == 's'){
+                Action = DOWN;
             }
-            else if(action == SHOOT){
-                Plane::get_pPos();
-                Projectile::shoot_pProj()
+            else if(input == 'e'){
+                Action = SHOOT;
             }
+            return Action;
         }
 };
 
-class Display{
+class Display: public Projectile, Monkey{
     private:
         int yPos[15];
         int xPos[20];
     
     public:
         void setup(){
+            setMonkeyHitPoints(100);
             for(int i=0;i<sizeof(yPos); i++){
                 for(int j = 0; j<sizeof(xPos); j++){
                     std::cout << '/t';
@@ -67,7 +70,11 @@ jgs ||      \_/    \'-'/
     ||======||
     ||      ||) << '/n';
             */
+        std::cout << "Monkey HP:" << getMonkeyHitPoints() << endl;
         }
+
+    void projDisplay(){}
+
         
 };
 
@@ -85,19 +92,30 @@ class Projectile{
 
 };
 
-class Plane{
+class Plane: KBMInput{
     protected:
         int pPos_y[15];
     
     public:
-        int pPos;
-        int get_pPos(){
-            for(int i=0;i<sizeof(pPos_y);i++){
-                if(pPos_y[i]== 1){
-                    pPos = i;
+        int pPos = 8;
+        int* get_pPos(int pPos){
+            // for(int i=0;i<sizeof(pPos_y);i++){
+            //     if(pPos_y[i]== 1){
+            //         pPos = i;
+            //     }
+            pPos_y[pPos] = 1;
+            return pPos_y ;
+        }
+
+        void planeMove(){
+            if(setKBMInput() != SHOOT){
+                if(setKBMInput()== UP){
+                    pPos++;
                 }
-            }            
-            return pPos;
+                else{
+                    pPos--;
+                }
+            }
         }
 
 };
@@ -107,6 +125,15 @@ class Monkey{
         int hitPoints;
     
     public:
+
+        void setMonkeyHitPoints(int hp){
+            hp=hitPoints;
+        }
+
+        int getMonkeyHitPoints(){
+            return(hitPoints);
+        }
+
         int monkeyHit(int hitPoints, int pProj_x[]){
             if(pProj_x[20]==1){
                 hitPoints--;
