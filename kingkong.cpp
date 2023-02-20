@@ -5,8 +5,16 @@
 
 using namespace std;
 
+
 int main(){
-    Display::setup();
+
+
+    Display game;
+
+    game.setLevel(1);
+    game.drawGrid();
+    game.hideCursor();
+
     return 0;
 }
 
