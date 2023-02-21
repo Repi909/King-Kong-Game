@@ -1,19 +1,14 @@
 #include <iostream>
-#include <conio.h>
-#include <windows.h>
 #include "headers.h"
 
 using namespace std;
-
 
 int main(){
 
 
     Display game;
 
-    game.setLevel(1);
-    game.drawGrid();
-    game.hideCursor();
+    game.drawDisplay();
 
     return 0;
 }
