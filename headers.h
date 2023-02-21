@@ -11,7 +11,7 @@ class Setup{
 
     public:
 
-    char *stringToArray(int arrayRow, int arrayCol, std::string conversion){
+    char* stringToArray(int arrayRow, int arrayCol, std::string conversion){
 
         char fullArray[arrayRow][arrayCol];
         for (int row = 0; row < sizeof(arrayRow); row++){
