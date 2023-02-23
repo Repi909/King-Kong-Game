@@ -7,41 +7,52 @@
 #include <stdio.h>
 #include <windows.h>
 
-class Setup{
+  class Setup{
 
-    public:
+      public:
+        bool Enable;
+        int level = 1;
 
-    char* stringToArray(int arrayRow, int arrayCol, std::string conversion){
+        void show_cursor (bool Enable){
+            if (Enable) printf ("\033[?25h");
+            else printf ("\033[?25l");
+        } // show_cursor taken from Test.cpp written by Peter Jones
 
-        char fullArray[arrayRow][arrayCol];
-        for (int row = 0; row < sizeof(arrayRow); row++){
-            for(int col = 0; col < sizeof(arrayCol); col++){
-                fullArray[row][col] = conversion[col + (row * 9)];
-            } 
+        void move_cursor(int arrayRow, int arrayColumn){
+            printf("\033[%d;%d;%dm]", arrayRow, arrayColumn);
+        } // move_cursor taken from Test.cpp written by Peter Jones
+
+        int setLevel(int setlevel){
+            level = setlevel;
+            return level;
         }
-        return *fullArray;
-    }
-};
+
+        int getLevel(){
+            return level;
+        }
+  };
 
 
 class KBMInput{                                                 //Unbuffered keyboard input from conio.h using the getch() method. Enumerated values for referencing later in code.
 
     protected:
-        enum action{ UP='w', DOWN ='s', SHOOT = 'e'};           //Enum cases for UP, DOWN, SHOOT
+        enum action{ UP='w', DOWN ='s', SHOOT = 3, NONE = 'z'};           //Enum cases for UP, DOWN, SHOOT
         action Action;
 
     public:
-        void setKBMInput(){                                   //Method to return KBM input when called upon in inherited classes.
+        void setKBMInput(char input = getch()){                                   //Method to return KBM input when called upon in inherited classes.
 
-            char input = getch();
             if(input == 'w'){
                 Action = UP;
             }
             else if(input == 's'){
                 Action = DOWN;
             }
-            else if(input == 'e'){
+            else if(input == 3){
                 Action = SHOOT;
+            }
+            else{
+                Action = NONE;
             }
         }
 
@@ -50,33 +61,9 @@ class KBMInput{                                                 //Unbuffered key
         }
 };
 
-class Heading: public Setup {
-    
-    private:
-        char headingArrayRow[5];
-        char headingArrayCol[59];
-        std::string headingASCII = R"( _  ___               _  __                    ____                      
-                                      | |/ (_)_ __   __ _  | |/ /___  _ __   __ _   / ___| __ _ _ __ ___   ___ 
-                                      | ' /| | '_ \ / _` | | ' // _ \| '_ \ / _` | | |  _ / _` | '_ ` _ \ / _ \
-                                      | . \| | | | | (_| | | . | (_) | | | | (_| | | |_| | (_| | | | | | |  __/
-                                      |_|\_|_|_| |_|\__, | |_|\_\___/|_| |_|\__, |  \____|\__,_|_| |_| |_|\___|
-                                                    |___/                   |___/                              )";
-
-    public:
-        // char headingArray[5][59];
-
-        void drawHeadingArray(){
-            char* arrptr = stringToArray(5,59,headingASCII);
-            for(int i=0;i<sizeof(headingArrayRow);i++){
-                for(int j=0;i<sizeof(headingArrayCol);i++)
-                std::cout << arrptr[i];
-            }
-        }
-};
-
 class Projectile{
     private:
-        char projArray[20][27];
+        //char projArray[20][27];
     
     public:
         int shoot_pProj(){
@@ -92,106 +79,87 @@ class Projectile{
         }
 };
 
-class Plane: public KBMInput{
-    protected:
-        char planeArray[15][27];
-    
-    public:
+class Character: public KBMInput{
 
-        void drawPlane(){
-
-        }
-
-        void planeMove(){
-            if(getKBMInput() != SHOOT){
-                if(getKBMInput()== UP){
-                }
-                else{
-                }
-            }
-        }
-};
-
-class Monkey: public Setup{
     private:
         int hitPoints;
-        char monkeyArray[24][27];
-        std::string monkey = R"( || (__/ ||
-                            ||  | | :-"""-.
-                            ||==| \/-=-.   \
-                            ||  |(_|o o/   |_
-                            ||   \/ "  \   ,_)
-                            ||====\ ^  /__/
-                            ||     ;--'  `-.
-                            ||    /      .  \
-                            ||===;        \  \
-                            ||   |         | |
-                            || .-\ '     _/_/
-                            |:'  _;.    (_  \
-                            /  .'  `;\   \\_/
-                           |_ /     |||  |\\
-                          /  _)=====|||  | ||
-                         /  /|      ||/  / //
-                         \_/||      ( `-/ ||
-                            ||======/  /  \\ .-.
-                        jgs ||      \_/    \'-'/
-                            ||      ||      `"`
-                            ||======||
-                            ||      ||          )";
+        char projectile;
+        int RandIndex = rand() % 6;
+        std::string pname;
+        std::string mname;
+        char* monkeyName[5] = {"King Kong", "Curious George", "Rafiki", "Wukong", "Donkey Kong"};
+        char* playerName[5] = {"Amelia Earhart", "Maverick", "Dusty Crophopper", "Auntie Mabel and Pippin", "Orville and Wilbur Wright"};
 
     public:
 
-        void drawMonkeyArray(){
+        Character(int hp, char proj){
+            hitPoints = hp;
+            projectile = proj;
         }
 
-        void setMonkeyHitPoints(int hp){
-            hp= hitPoints;
+        void setCharacterName(){
+            pname = monkeyName[RandIndex];
+            mname = monkeyName[RandIndex];
         }
 
-        int getMonkeyHitPoints(){
+        void setHitPoints(int hp){
+            hitPoints= hp;
+        }
+
+        int getHitPoints(){
             return(hitPoints);
         }
 
-        int monkeyHit(int hitPoints, int pProj_x[]){
-            if(pProj_x[20]==1){
-                hitPoints--;
+        void moveCharacter(){
+            setKBMInput(getch());
+            if(getKBMInput() == SHOOT){
             }
-            return hitPoints;
+
+            else if(getKBMInput()== UP){
+
+            }
+
+            else if(getKBMInput() == DOWN){
+
+            }
+
+            else{
+
+            }
         }
 };
 
-class Display: public Heading, public Plane, public Monkey {
+class Display: public Setup, public Character {
 
     private:
-        int level;
-        bool Enable;
+        std::string levelIndicator = "Level: ";
+        std::string monkeyHPIndicator = "Monkey Health: ";
+        std::string headingASCII = " _  ___               _  __                    ____                      \n| |/  /_ _ __   __ _  | |/ /___  _ __   __ _   / ___| __ _ _ __ ___   ___ \n| ' /| | '_ \\ / _` | | ' // _ \\| '_ \\ / _` | | |  _ / _` | '_ ` _ \\ / _ \\ \n| . \\| | | | | (_| | | . | (_) | | | | (_| | | |_| | (_| | | | | | |  __/\n|_|\\_|_|_| |_|\\__, | |_|\\_\\___/|_| |_|\\__, |  \\____|\\__,_|_| |_| |_|\\___|\n              |___/                   |___/                              ";
+        std::string planeArt = "";
+        std::string monkeyArt = " || (__/ ||\n||  | | :-'''-.\n||==| \\/-=-.   \\ \n||  |(_|o o/   |_\n||   \\/ '  \\   ,_)\n||====\\ ^  /__/\n||     ;--'  `-.||    /      .  \\\n||===;        \\  \\\n    ||   |         | |\n    || .-\\ '     _/_/\n    |:'  _;.    (_  \\\n    /  .'  `;\\   \\_/\n   |_ /     |||  |\\\\\n  /  _)=====|||  | ||\n /  /|      ||/  / //\n \\_/||      ( `-/ ||\n    ||======/  /  \\ .-.\njgs ||      \\_/    \'-'/\n    ||      ||      `'`\n    ||======||\n    ||      ||          ";
+
+        const char* create_cstring(std::string asciiArt){
+            const char* cstring = asciiArt.c_str();  //headingArr = 6 rows 73 columns
+            return cstring;
+        }
 
     public:
 
-        void show_cursor (bool Enable){
-          if (Enable) printf ("\033[?25h");
-          else printf ("\033[?25l");
-        } // show_cursor taken from Test.cpp written by Peter Jones
+        Display(int columns, int rows){ //250 columns // 30 rows
 
-        void move_cursor(int arrayRow, int arrayColumn){
-            printf("\033[%d;%d;%dm]", arrayRow, arrayColumn);
-        } // move_cursor taken from Test.cpp written by Peter Jones
+
+
+        }
 
         void drawDisplay(){
-            show_cursor(Enable);
-            move_cursor(0,0);
-            drawHeadingArray();
-            //concatenate plane -> projectile grid -> monkey
+            create_cstring(headingASCII);
+            create_cstring(levelIndicator);
+            create_cstring(monkeyHPIndicator);
+            create_cstring(planeArt);
+            create_cstring(monkeyArt);
 
-        }
+            //form cstrings into display format planned
 
-        int setLevel(int setlevel){
-            level = setlevel;
-            return level;
-        }
-
-        int getLevel(){
-            return level;
         }
 
 };
