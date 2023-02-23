@@ -9,7 +9,7 @@
 
   class Setup{
 
-      public:
+    public:
         bool Enable;
         int level = 1;
 
@@ -29,6 +29,14 @@
 
         int getLevel(){
             return level;
+        }
+
+        void nextLevel(){
+            int currentLevel = getLevel();
+            currentLevel++;
+            setLevel(currentLevel);
+            int currentHP = getHitPoints();
+            setHitPoints(currentHP + 20);
         }
   };
 
@@ -66,9 +74,7 @@ class Projectile{
         //char projArray[20][27];
     
     public:
-        int shoot_pProj(){
-            return 0;
-        }
+
         int shoot_mProj(){
             return 0;
         }
@@ -79,9 +85,12 @@ class Projectile{
         }
 };
 
-class Character: public KBMInput{
+class Character: public KBMInput, public Setup{
 
     private:
+        int loopCounter;
+        int projectileNum;
+        int projectileFrq;
         int hitPoints;
         char projectile;
         int RandIndex = rand() % 6;
@@ -90,6 +99,27 @@ class Character: public KBMInput{
         char* monkeyName[5] = {"King Kong", "Curious George", "Rafiki", "Wukong", "Donkey Kong"};
         char* playerName[5] = {"Amelia Earhart", "Maverick", "Dusty Crophopper", "Auntie Mabel and Pippin", "Orville and Wilbur Wright"};
 
+        void setCharacterName(){
+            pname = monkeyName[RandIndex];
+            mname = monkeyName[RandIndex];
+        }
+
+        int getProjectileFrq(){
+            return projectileFrq;
+        }
+
+        int getProjectileNum(){
+            return projectileNum;
+        }
+
+        void setProjectileNum(int pNum){
+            projectileNum = pNum;
+        }
+
+        void setProjectileFrq(int pFrq){
+            projectileFrq = pFrq;
+        }
+
     public:
 
         Character(int hp, char proj){
@@ -97,10 +127,7 @@ class Character: public KBMInput{
             projectile = proj;
         }
 
-        void setCharacterName(){
-            pname = monkeyName[RandIndex];
-            mname = monkeyName[RandIndex];
-        }
+        Character()=default;
 
         void setHitPoints(int hp){
             hitPoints= hp;
@@ -127,28 +154,47 @@ class Character: public KBMInput{
 
             }
         }
+
+        void shootPlaneProj(){
+            
+            if(Action = SHOOT){
+
+            }
+        }
+
+        void shootMonkeyProj(){
+
+            if(loopCounter>getProjectileFrq())
+            int currentProjNum = getProjectileNum();
+            for(int i = 0; i<currentProjNum(); i++){
+                int projRow = rand()% 24 + 6;
+                move_cursor(projRow);
+                printf(projectile);
+            }
+        }
 };
 
 class Display: public Setup, public Character {
 
     private:
+        int displayColumns;
+        int displayRows;
         std::string levelIndicator = "Level: ";
         std::string monkeyHPIndicator = "Monkey Health: ";
-        std::string headingASCII = " _  ___               _  __                    ____                      \n| |/  /_ _ __   __ _  | |/ /___  _ __   __ _   / ___| __ _ _ __ ___   ___ \n| ' /| | '_ \\ / _` | | ' // _ \\| '_ \\ / _` | | |  _ / _` | '_ ` _ \\ / _ \\ \n| . \\| | | | | (_| | | . | (_) | | | | (_| | | |_| | (_| | | | | | |  __/\n|_|\\_|_|_| |_|\\__, | |_|\\_\\___/|_| |_|\\__, |  \\____|\\__,_|_| |_| |_|\\___|\n              |___/                   |___/                              ";
+        std::string headingASCII = " _  ___               _  __                    ____                      \n| |/ /_ _ __   __ _  | |/ /___  _ __   __ _   / ___| __ _ _ __ ___   ___ \n| ' /| | '_ \\ / _` | | ' // _ \\| '_ \\ / _` | | |  _ / _` | '_ ` _ \\ / _ \\ \n| . \\| | | | | (_| | | . | (_) | | | | (_| | | |_| | (_| | | | | | |  __/\n|_|\\_|_|_| |_|\\__, | |_|\\_\\___/|_| |_|\\__, |  \\____|\\__,_|_| |_| |_|\\___|\n              |___/                   |___/                              ";
         std::string planeArt = "";
         std::string monkeyArt = " || (__/ ||\n||  | | :-'''-.\n||==| \\/-=-.   \\ \n||  |(_|o o/   |_\n||   \\/ '  \\   ,_)\n||====\\ ^  /__/\n||     ;--'  `-.||    /      .  \\\n||===;        \\  \\\n    ||   |         | |\n    || .-\\ '     _/_/\n    |:'  _;.    (_  \\\n    /  .'  `;\\   \\_/\n   |_ /     |||  |\\\\\n  /  _)=====|||  | ||\n /  /|      ||/  / //\n \\_/||      ( `-/ ||\n    ||======/  /  \\ .-.\njgs ||      \\_/    \'-'/\n    ||      ||      `'`\n    ||======||\n    ||      ||          ";
 
         const char* create_cstring(std::string asciiArt){
-            const char* cstring = asciiArt.c_str();  //headingArr = 6 rows 73 columns
+            const char* cstring = asciiArt.c_str();  //headingASCII = 6 rows 73 columns. monkeyArt = 24 rows 24 columns 
             return cstring;
         }
 
     public:
 
         Display(int columns, int rows){ //250 columns // 30 rows
-
-
-
+            displayColumns=columns;
+            displayRows=rows;
         }
 
         void drawDisplay(){
