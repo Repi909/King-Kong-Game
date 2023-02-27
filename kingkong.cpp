@@ -5,34 +5,40 @@ using namespace std;
 
 int main(){
 
+    bool stop = false;
+
+    //create objects
     Display output(250,30);
-    Character monkey(100, ')');
+    Character monkey(5, ')');
     Character plane(3, '-');
 
-    //setup display and create objects
+    //draw display based on level of game.
     if(output.getLevel() == 1){
         output.drawDisplay();
     }
 
-    //main loop for game running
-    while(monkey.getHitPoints() != 0 || plane.getHitPoints() != 0){
-            
-        plane.moveCharacter();
+    else{
+        //main loop for game running
+        while(stop == false){
 
+            if(plane.getHitPoints() == 0){
+                stop = endGame();
+            }
+
+            else if(monkey.getHitPoints() == 0){
+                // move to next level. Increase monkey hp and projectile frequency
+                output.nextLevel();
+                output.drawDisplay();
+            }
+
+            else{
+                plane.moveCharacter(); // if plane needs to stay still what is getch() timeout.
+                monkey.shootMonkeyProj();
+                //check if collision and set hp decrement
+            }
+        }
     }
-
-    if(plane.getHitPoints() == 0){
-            //end game and ask to play again
-        output.setLevel(1);
-
-    }
-
-    else if(monkey.getHitPoints() == 0){
-        // move to next level. Increase monkey hp and projectile frequency
-        output.nextLevel();
-        
-
-    } 
+    
 
     return 0;
 }
@@ -40,3 +46,4 @@ int main(){
 
 //references
 //  https://www.youtube.com/watch?v=gWq0tJLsjRs snake game in 20mins
+//  test.cpp by Peter Jones (Iteration 1 and 2)

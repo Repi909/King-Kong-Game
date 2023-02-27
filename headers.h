@@ -18,9 +18,15 @@
             else printf ("\033[?25l");
         } // show_cursor taken from Test.cpp written by Peter Jones
 
-        void move_cursor(int arrayRow, int arrayColumn){
-            printf("\033[%d;%d;%dm]", arrayRow, arrayColumn);
-        } // move_cursor taken from Test.cpp written by Peter Jones
+        void print_at (int Row, int Col, char* array[][]){
+            
+            for(int i=0; i<sizeof(array); i++){
+                for(int j=0; j<sizeof(array); j++){
+                    wprintf (L"\033[%d;%df%lc", Row, Col, array[i]); // print the Unicode character
+                }
+            }
+           
+        }// print_at taken and adapted from Test.cpp written by Peter Jones
 
         int setLevel(int setlevel){
             level = setlevel;
@@ -36,7 +42,7 @@
             currentLevel++;
             setLevel(currentLevel);
             int currentHP = getHitPoints();
-            setHitPoints(currentHP + 20);
+            setHitPoints(currentHP + 2);
         }
   };
 
@@ -48,7 +54,7 @@ class KBMInput{                                                 //Unbuffered key
         action Action;
 
     public:
-        void setKBMInput(char input = getch()){                                   //Method to return KBM input when called upon in inherited classes.
+        void setKBMInput(char input){                                   //Method to return KBM input when called upon in inherited classes.
 
             if(input == 'w'){
                 Action = UP;
@@ -71,38 +77,11 @@ class KBMInput{                                                 //Unbuffered key
 
 class Projectile{
     private:
+        int projectileNum;
+        int projectileFrq;
         //char projArray[20][27];
     
     public:
-
-        int shoot_mProj(){
-            return 0;
-        }
-        void projCollision(){}
-        void drawProjGrid(){
-            //projectile grid draw
-
-        }
-};
-
-class Character: public KBMInput, public Setup{
-
-    private:
-        int loopCounter;
-        int projectileNum;
-        int projectileFrq;
-        int hitPoints;
-        char projectile;
-        int RandIndex = rand() % 6;
-        std::string pname;
-        std::string mname;
-        char* monkeyName[5] = {"King Kong", "Curious George", "Rafiki", "Wukong", "Donkey Kong"};
-        char* playerName[5] = {"Amelia Earhart", "Maverick", "Dusty Crophopper", "Auntie Mabel and Pippin", "Orville and Wilbur Wright"};
-
-        void setCharacterName(){
-            pname = monkeyName[RandIndex];
-            mname = monkeyName[RandIndex];
-        }
 
         int getProjectileFrq(){
             return projectileFrq;
@@ -120,9 +99,37 @@ class Character: public KBMInput, public Setup{
             projectileFrq = pFrq;
         }
 
+        void projCollision(){
+
+        }
+
+        void drawProjGrid(){
+            //projectile grid draw
+
+        }
+};
+
+class Character: public KBMInput, public Setup, public Projectile{
+
+    private:
+        int loopCounter;
+        int hitPoints;
+        char projectile;
+        int RandIndex = rand() % 6;
+        std::string pname;
+        std::string mname;
+        char* monkeyName[5] = {"King Kong", "Curious George", "Rafiki", "Wukong", "Donkey Kong"};
+        char* playerName[5] = {"Amelia Earhart", "Maverick", "Dusty Crophopper", "Auntie Mabel and Pippin", "Orville and Wilbur Wright"};
+
+        void setCharacterName(){
+            pname = monkeyName[RandIndex];
+            mname = monkeyName[RandIndex];
+        }
+
+
     public:
 
-        Character(int hp, char proj){
+        Character(int hp, char proj){       //object constructor for Character class with default defined below.
             hitPoints = hp;
             projectile = proj;
         }
@@ -138,7 +145,8 @@ class Character: public KBMInput, public Setup{
         }
 
         void moveCharacter(){
-            setKBMInput(getch());
+            char input = getch();
+            setKBMInput(input);
             if(getKBMInput() == SHOOT){
             }
 
@@ -149,17 +157,6 @@ class Character: public KBMInput, public Setup{
             else if(getKBMInput() == DOWN){
 
             }
-
-            else{
-
-            }
-        }
-
-        void shootPlaneProj(){
-            
-            if(Action = SHOOT){
-
-            }
         }
 
         void shootMonkeyProj(){
@@ -167,7 +164,7 @@ class Character: public KBMInput, public Setup{
             if(loopCounter>getProjectileFrq())
             int currentProjNum = getProjectileNum();
             for(int i = 0; i<currentProjNum(); i++){
-                int projRow = rand()% 24 + 6;
+                int projRow = rand()% 24 + 6;   //might be bug where print on same line twice.
                 move_cursor(projRow);
                 printf(projectile);
             }
@@ -181,9 +178,11 @@ class Display: public Setup, public Character {
         int displayRows;
         std::string levelIndicator = "Level: ";
         std::string monkeyHPIndicator = "Monkey Health: ";
+        std::string planeHPIndicator = "Lives: "
         std::string headingASCII = " _  ___               _  __                    ____                      \n| |/ /_ _ __   __ _  | |/ /___  _ __   __ _   / ___| __ _ _ __ ___   ___ \n| ' /| | '_ \\ / _` | | ' // _ \\| '_ \\ / _` | | |  _ / _` | '_ ` _ \\ / _ \\ \n| . \\| | | | | (_| | | . | (_) | | | | (_| | | |_| | (_| | | | | | |  __/\n|_|\\_|_|_| |_|\\__, | |_|\\_\\___/|_| |_|\\__, |  \\____|\\__,_|_| |_| |_|\\___|\n              |___/                   |___/                              ";
         std::string planeArt = "";
         std::string monkeyArt = " || (__/ ||\n||  | | :-'''-.\n||==| \\/-=-.   \\ \n||  |(_|o o/   |_\n||   \\/ '  \\   ,_)\n||====\\ ^  /__/\n||     ;--'  `-.||    /      .  \\\n||===;        \\  \\\n    ||   |         | |\n    || .-\\ '     _/_/\n    |:'  _;.    (_  \\\n    /  .'  `;\\   \\_/\n   |_ /     |||  |\\\\\n  /  _)=====|||  | ||\n /  /|      ||/  / //\n \\_/||      ( `-/ ||\n    ||======/  /  \\ .-.\njgs ||      \\_/    \'-'/\n    ||      ||      `'`\n    ||======||\n    ||      ||          ";
+        std::string endGame = ""
 
         const char* create_cstring(std::string asciiArt){
             const char* cstring = asciiArt.c_str();  //headingASCII = 6 rows 73 columns. monkeyArt = 24 rows 24 columns 
@@ -195,17 +194,36 @@ class Display: public Setup, public Character {
         Display(int columns, int rows){ //250 columns // 30 rows
             displayColumns=columns;
             displayRows=rows;
+            bool stop = false;
         }
 
         void drawDisplay(){
-            create_cstring(headingASCII);
-            create_cstring(levelIndicator);
-            create_cstring(monkeyHPIndicator);
-            create_cstring(planeArt);
-            create_cstring(monkeyArt);
+            char* heading = create_cstring(headingASCII);
+            print_at(0, 0, heading)
+            char* levelInd = create_cstring(levelIndicator);
+            print_at(levelInd)
+            char* monkeyHP = create_cstring(monkeyHPIndicator);
+            print_at(monkeyHP)
+            char* plane = create_cstring(planeArt);
+            print_at(plane)
+            char* monkey = create_cstring(monkeyArt);
+            print_at(monkey)
+
 
             //form cstrings into display format planned
 
+        }
+
+        bool endGame(){
+
+            create_cstring(endGame);
+            //print_at(print in the middle of the array);
+            cout << "Press Enter to end game."
+            cin << int endGame;
+            if(endGame == 10){
+                stop = true;
+            }
+            return stop;
         }
 
 };
