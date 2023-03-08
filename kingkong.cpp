@@ -8,9 +8,12 @@ int main(){
     bool stop = false;
 
     //create objects
-    Display output(250,30);
-    Character monkey(5, ')');
-    Character plane(3, '-');
+    Display output(30,250);
+    Character monkey(5);
+    Projectile monkeyProj(')');
+    Character plane(3);
+    Projectile planeProj('-');
+
 
     //draw display based on level of game.
     if(output.getLevel() == 1){
@@ -22,7 +25,7 @@ int main(){
         while(stop == false){
 
             if(plane.getHitPoints() == 0){
-                stop = endGame();
+                //stop = output.endGame();
             }
 
             else if(monkey.getHitPoints() == 0){
@@ -32,8 +35,9 @@ int main(){
             }
 
             else{
-                plane.moveCharacter(); // if plane needs to stay still what is getch() timeout.
+                output.moveCharacter(); // if plane needs to stay still what is getch() timeout.
                 monkey.shootMonkeyProj();
+                output.moveProjectiles();
                 //check if collision and set hp decrement
             }
         }
