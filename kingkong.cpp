@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include "headers.h"
 
 using namespace std;
@@ -8,42 +9,39 @@ int main(){
     bool stop = false;
 
     //create objects
-    Display output(30,250);
+    Display output(150,30);
     Character monkey(5);
-    Projectile monkeyProj(')');
     Character plane(3);
-    Projectile planeProj('-');
-
 
     //draw display based on level of game.
-    if(output.getLevel() == 1){
-        output.drawDisplay();
-    }
+    system("cls"); //clear console
+    output.show_cursor(false);
+    output.drawDisplay();
+    output.print_at(121,3,monkey.getHitPoints());
+    output.print_at(117,0,output.getLevel());
 
-    else{
-        //main loop for game running
-        while(stop == false){
+    int startTime = 0; // Get current system time
 
-            if(plane.getHitPoints() == 0){
-                //stop = output.endGame();
-            }
+    //main loop for game running
+    while(stop == false){
 
-            else if(monkey.getHitPoints() == 0){
-                // move to next level. Increase monkey hp and projectile frequency
-                output.nextLevel();
-                output.drawDisplay();
-            }
+        output.characterAction(startTime); // if plane needs to stay still what is getch() timeout.
+        monkey.shootMonkeyProj();
+        //char monkeyHit = output.updateProjectiles();
+        // if (monkeyHit = 'h'){
+        //     int hp = monkey.getHitPoints();
+        //     monkey.setHitPoints(hp--);
+        // }
 
-            else{
-                output.moveCharacter(); // if plane needs to stay still what is getch() timeout.
-                monkey.shootMonkeyProj();
-                output.moveProjectiles();
-                //check if collision and set hp decrement
-            }
+        if(plane.getHitPoints() == 0){
+           stop = output.endGame();
+        }
+        else if(monkey.getHitPoints() == 0){
+            // move to next level. Increase monkey hp and projectile frequency
+            output.nextLevel();
+            output.drawDisplay();
         }
     }
-    
-
     return 0;
 }
 

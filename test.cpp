@@ -1,19 +1,41 @@
 #include <iostream>
+#include <vector>
+#include <sstream>
+#include <string>
 
 using namespace std;
 
-const char* create_cstring(std::string asciiArt){
-    const char* cstring = asciiArt.c_str();  //headingASCII = 6 rows 73 columns. monkeyArt = 24 rows 24 columns 
-    return cstring;
+vector<vector<char>> create_array_from_string(const string& asciiArt) {
+    vector<vector<char>> array;
+    stringstream stringconvert(asciiArt);
+    string line;
+    while (getline(stringconvert, line)) {
+        vector<char> char_line;
+        for (char c : line) {
+            char_line.push_back(c);
+        }
+        array.push_back(char_line);
+    }
+    return array;
 }
 
-int main(){
+void print_array_at_position(const vector<vector<char>>& array, int x, int y) {
+    for (int i = 0; i < array.size(); ++i) {
+        for (int j = 0; j < array[i].size(); ++j) {
+            if (i == y && j == x) {
+                cout << "@";
+            } else {
+                cout << array[i][j];
+            }
+        }
+        cout << endl;
+    }
+}
 
-    string AsciiArt = "|| (__/ ||\n||  | | :-'''-.\n||==| \\/-=-.   \\ \n||  |(_|o o/   |_\n||   \\/ '  \\   ,_)\n||====\\ ^  /__/\n||     ;--'  `-.||    /      .  \\\n||===;        \\  \\\n||   |         | |\n    || .-\\ '     _/_/\n|:'  _;.    (_  \\\n/  .'  `;\\   \\_/\n|_ /     |||  |\\\\\n/  _)=====|||  | ||\n/  /|      ||/  / //\n \\_/||      ( `-/ ||\n    ||======/  /  \\ .-.\njgs ||      \\_/    \'-'/\n    ||      ||      `'`\n    ||======||\n    ||      ||          ";
-    string headingASCII = " _  ___               _  __                    ____                      \n| |/ /_ _ __   __ _  | |/ /___  _ __   __ _   / ___| __ _ _ __ ___   ___ \n| ' /| | '_ \\ / _` | | ' // _ \\| '_ \\ / _` | | |  _ / _` | '_ ` _ \\ / _ \\ \n| . \\| | | | | (_| | | . | (_) | | | | (_| | | |_| | (_| | | | | | |  __/\n|_|\\_|_|_| |_|\\__, | |_|\\_\\___/|_| |_|\\__, |  \\____|\\__,_|_| |_| |_|\\___|\n              |___/                   |___/                              ";
-    string heading = create_cstring(headingASCII);
-    cout << heading << endl;
-    string cstring = create_cstring(AsciiArt);
-    cout << cstring;
-    
+int main() {
+    string asciiArt = "###\n#.#\n###\n";
+    vector<vector<char>> array = create_array_from_string(asciiArt);
+    int x = 10, y = 12;
+    print_array_at_position(array, x, y);
+    return 0;
 }
