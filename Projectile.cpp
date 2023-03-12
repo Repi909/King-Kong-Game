@@ -35,12 +35,17 @@ void Projectile::projCollision(){
 
 }
 
-std::vector<int> Projectile::getPlaneProjectilePositions(COORD projectileTopLeft, int projectileRegion[], std::string projectile) {
+//Method to return the COORD of found projectiles in an array
+std::vector<std::vector<COORD>> Projectile::getPlaneProjectilePositions(COORD projectileTopLeft, int projectileRegion[], std::string projectile) {
     HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
     GetConsoleScreenBufferInfo(console, &consoleInfo);
     COORD foundPos = {-1, -1};
+    std::vector<COORD> foundProjectileCoords;
+    std::vector<std::vector<COORD>> foundProjCoord2D;
+
     for (short int i = projectileTopLeft.X; i < projectileTopLeft.X + projectileRegion[0]; i++) {
+        foundProjectileCoords.clear(); // clear the vector before each iteration
         for (short int j = projectileTopLeft.Y; j < projectileTopLeft.Y + projectileRegion[1]; j++) {
             COORD projPos = {i, j};
             SetConsoleCursorPosition(console, projPos);
@@ -48,12 +53,12 @@ std::vector<int> Projectile::getPlaneProjectilePositions(COORD projectileTopLeft
             SMALL_RECT readRegion = {projPos.X, projPos.Y, projPos.X, projPos.Y};
             if (ReadConsoleOutput(console, &projChar, {1, 1}, {0, 0}, &readRegion) && projChar.Char.AsciiChar == '-') {
                 foundPos = projPos;
-                break;
+                foundProjectileCoords.push_back(foundPos);
             }
         }
-        if (foundPos.X != -1 && foundPos.Y != -1) {
-            break;
+        if (!foundProjectileCoords.empty()) {
+            foundProjCoord2D.push_back(foundProjectileCoords);
         }
     }
-    return {foundPos.X, foundPos.Y};
+    return foundProjCoord2D;
 }

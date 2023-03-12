@@ -45,7 +45,7 @@ class Projectile{
         void setProjectileFrq(int pFrq);
         int randProjRow();
         void projCollision();
-        std::vector<int> getPlaneProjectilePositions(COORD projectileTopLeft, int projectileRegion[], std::string projectile);
+        std::vector<std::vector<COORD>> getPlaneProjectilePositions(COORD projectileTopLeft, int projectileRegion[], std::string projectile);
 };
 
 class Character: public Setup, public Projectile{
