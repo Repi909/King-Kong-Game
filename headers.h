@@ -91,10 +91,10 @@ class KBM { //Unbuffered keyboard input from conio.h using the getch() method. E
 
         char input;
 
-        char KBMInput(int startTime){
+        char KBMInput(DWORD startTime){
             
-            int currentTime = GetTickCount();
-            int elapsedTime = currentTime - startTime;
+            DWORD currentTime = GetTickCount();
+            DWORD elapsedTime = currentTime - startTime;
             while(1){
 
                 if (_kbhit()){ // Check if a key has been pressed
@@ -102,7 +102,7 @@ class KBM { //Unbuffered keyboard input from conio.h using the getch() method. E
                     break;
                 }
 
-                if (elapsedTime > 5000){
+                if (elapsedTime > 500){
                     input = 'p'; // Timeout occurred
                     break;
                 }
@@ -113,8 +113,8 @@ class KBM { //Unbuffered keyboard input from conio.h using the getch() method. E
 
 class Projectile{
     private:
-        int projectileNum;      //number of projectiles fired at one instance.
-        int projectileFrq;      //frequency at which projectiles are fired by Monkey.
+        int projectileNum = 1;      //number of projectiles fired at one instance.
+        int projectileFrq = 5000;      //frequency at which projectiles are fired by Monkey in seconds.
     
     public:
         std::string mProjectile = ")";
@@ -136,38 +136,44 @@ class Projectile{
             projectileFrq = pFrq;
         }
 
+        int randProjRow(){
+            int projRow = rand() % 22 + 8;
+            return projRow;
+        }
+
         //Method to find position of projectile within array. If projectiles are next to each other, moveProjectile will delete from array.
         void projCollision(){
             
 
         }
 
-//         int *projPos getPlaneProjectilePositions(COORD projectileTopLeft, int projectileRegion[], std::string projectile){
-
-//             CONSOLE_SCREEN_BUFFER_INFO console;
-//             GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &console);
-//             COORD foundpos;
-//             for(int i=projectileTopLeft.X; i<projectileTopLeft.X + projectileRegion[0]; i++){
-//                 for(int j=projectileTopLeft.Y; j<projectileTopLeft.Y + projectileRegion[1]; j++){
-//                     COORD projPos = {i,j};
-//                     SetConsoleCursorPosition(console,projPos);
-//                     if(ReadConsoleOutputCharacter(console, &projChar, 1, projPos) && projChar == '-'){
-//                         foundPos = projPos;
-//                         break;
-//                     }
-//                 }
-//                 if(foundPos != -1){
-//                     break;
-//                 }
-//             }
-//             return *[projPos.X, projPos.Y];
-//         }
+        std::vector<int> getPlaneProjectilePositions(COORD projectileTopLeft, int projectileRegion[], std::string projectile) {
+            HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+            CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+            GetConsoleScreenBufferInfo(console, &consoleInfo);
+            COORD foundPos = {-1, -1};
+            for (short int i = projectileTopLeft.X; i < projectileTopLeft.X + projectileRegion[0]; i++) {
+                for (short int j = projectileTopLeft.Y; j < projectileTopLeft.Y + projectileRegion[1]; j++) {
+                    COORD projPos = {i, j};
+                    SetConsoleCursorPosition(console, projPos);
+                    CHAR_INFO projChar;
+                    SMALL_RECT readRegion = {projPos.X, projPos.Y, projPos.X, projPos.Y};
+                    if (ReadConsoleOutput(console, &projChar, {1, 1}, {0, 0}, &readRegion) && projChar.Char.AsciiChar == '-') {
+                        foundPos = projPos;
+                        break;
+                    }
+                }
+                if (foundPos.X != -1 && foundPos.Y != -1) {
+                    break;
+                }
+            }
+            return {foundPos.X, foundPos.Y};
+        }
 };
 
 class Character: public Setup, public Projectile{
 
     private:
-        int loopCounter;
         int hitPoints;
         int currentY_pos;
 
@@ -197,17 +203,6 @@ class Character: public Setup, public Projectile{
         int getCurrentYPos(){
             return currentY_pos;
         }
-
-        void shootMonkeyProj(){
-
-            int currentProjNum = getProjectileNum();
-            if(loopCounter>getProjectileFrq()){
-                for(int i = 0; i<currentProjNum; i++){
-                    int projRow = rand()% 24 + 6;   //might be bug where print on same line twice.
-                    print_at(99, projRow, mProjectile);  //99 is furthest right column before monkey
-                }
-            }
-        }
 };
 
 class Display: public Character, public KBM {
@@ -215,6 +210,9 @@ class Display: public Character, public KBM {
     private:
         COORD projectileTopLeft = {20,8};
         int projectileRegion[2] = {82,22};
+
+        int counter = 0;
+        int projRow;
 
         int RandIndex = rand() % 6;
         std::string pname;
@@ -309,7 +307,7 @@ jgs ||      \_/    \'-'/
         }
 
         //method to move plane object up and down array based on KBM input.
-        void characterAction(int startTime) {
+        int characterAction(DWORD startTime) {
             char input = KBMInput(startTime);
             int Ypos = getCurrentYPos(); // move the declaration outside the switch block
             switch (input) {
@@ -339,7 +337,7 @@ jgs ||      \_/    \'-'/
                         break;
                     }
 
-                case ' ': 
+                case ' ':
                     Ypos += 2;
                     print_at(20,Ypos,planeProjectile);
                     break;
@@ -349,6 +347,24 @@ jgs ||      \_/    \'-'/
 
                 default: // handle unrecognized input
                     break;
+            }
+            counter++;
+            return counter;
+        }
+
+        void shootMonkeyProj(DWORD startTime, int projRow){
+
+            if(counter==5){
+                projRow = randProjRow();
+            }
+            DWORD currentTime = GetTickCount();
+            DWORD elapsedTime = currentTime - startTime;
+            int currentProjNum = getProjectileNum();
+            for(int i=0;i<currentProjNum;i++){
+                if(elapsedTime>getProjectileFrq()){
+                    print_at(99, projRow, mProjectile);  //99 is furthest right column before monkey
+                    counter = 0;
+                }
             }
         }
 

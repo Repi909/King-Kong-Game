@@ -1,5 +1,6 @@
 #include <iostream>
-#include <vector>
+#include <chrono>
+#include <thread>
 #include "headers.h"
 
 using namespace std;
@@ -20,13 +21,13 @@ int main(){
     output.print_at(121,3,monkey.getHitPoints());
     output.print_at(117,0,output.getLevel());
 
-    int startTime = 0; // Get current system time
+    DWORD startTime = GetTickCount(); // Get current system time
 
     //main loop for game running
     while(stop == false){
 
-        output.characterAction(startTime); // if plane needs to stay still what is getch() timeout.
-        monkey.shootMonkeyProj();
+        output.characterAction(startTime);
+        output.shootMonkeyProj(startTime, 15);
         //char monkeyHit = output.updateProjectiles();
         // if (monkeyHit = 'h'){
         //     int hp = monkey.getHitPoints();
