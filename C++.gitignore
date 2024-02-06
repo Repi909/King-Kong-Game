@@ -33,3 +33,7 @@
 
 # Deprecated/Archived Files
 Deprecated/
+
+.vs
+.vscode
+.code-workspace
