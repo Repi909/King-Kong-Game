@@ -1,0 +1,41 @@
+﻿  KBMInput.cpp
+  kingkong.cpp
+K:\King-Kong-Game\headers.h(133,25): warning C4838: conversion from 'int' to 'SHORT' requires a narrowing conversion
+K:\King-Kong-Game\headers.h(133,28): warning C4838: conversion from 'int' to 'SHORT' requires a narrowing conversion
+K:\King-Kong-Game\headers.h(269,14): error C2365: 'Display::endGame': redefinition; previous definition was 'data member'
+K:\King-Kong-Game\headers.h(216): message : see declaration of 'Display::endGame'
+K:\King-Kong-Game\headers.h(272,22): error C2059: syntax error: 'constant'
+K:\King-Kong-Game\headers.h(272,37): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+K:\King-Kong-Game\headers.h(272,37): warning C4183: 'print_at': missing return type; assumed to be a member function returning 'int'
+K:\King-Kong-Game\headers.h(274,23): error C2143: syntax error: missing ';' before '<<'
+K:\King-Kong-Game\headers.h(274,23): error C2886: 'std::cout': symbol cannot be used in a member using-declaration
+C:\Program Files\Microsoft Visual Studio\2022\VC\Tools\MSVC\14.33.31629\include\iostream(40): message : see declaration of 'std::cout'
+K:\King-Kong-Game\headers.h(274,52): error C2238: unexpected token(s) preceding ';'
+K:\King-Kong-Game\headers.h(275,22): error C2143: syntax error: missing ';' before '>>'
+K:\King-Kong-Game\headers.h(275,22): error C2886: 'std::cin': symbol cannot be used in a member using-declaration
+C:\Program Files\Microsoft Visual Studio\2022\VC\Tools\MSVC\14.33.31629\include\iostream(39): message : see declaration of 'std::cin'
+K:\King-Kong-Game\headers.h(275,32): error C2238: unexpected token(s) preceding ';'
+K:\King-Kong-Game\headers.h(276,13): error C2059: syntax error: 'if'
+K:\King-Kong-Game\headers.h(276,30): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+K:\King-Kong-Game\headers.h(279,13): error C2059: syntax error: 'return'
+K:\King-Kong-Game\headers.h(279,24): error C2238: unexpected token(s) preceding ';'
+K:\King-Kong-Game\headers.h(282,1): error C2059: syntax error: '}'
+K:\King-Kong-Game\headers.h(282,1): error C2143: syntax error: missing ';' before '}'
+K:\King-Kong-Game\headers.h(228,1): error C2660: 'Display::print_at': function does not take 3 arguments
+K:\King-Kong-Game\headers.h(272,13): message : see declaration of 'Display::print_at'
+K:\King-Kong-Game\headers.h(229,1): error C2660: 'Display::print_at': function does not take 3 arguments
+K:\King-Kong-Game\headers.h(272,13): message : see declaration of 'Display::print_at'
+K:\King-Kong-Game\headers.h(230,1): error C2660: 'Display::print_at': function does not take 3 arguments
+K:\King-Kong-Game\headers.h(272,13): message : see declaration of 'Display::print_at'
+K:\King-Kong-Game\headers.h(231,1): error C2660: 'Display::print_at': function does not take 3 arguments
+K:\King-Kong-Game\headers.h(272,13): message : see declaration of 'Display::print_at'
+K:\King-Kong-Game\headers.h(232,1): error C2660: 'Display::print_at': function does not take 3 arguments
+K:\King-Kong-Game\headers.h(272,13): message : see declaration of 'Display::print_at'
+K:\King-Kong-Game\headers.h(233,1): error C2660: 'Display::print_at': function does not take 3 arguments
+K:\King-Kong-Game\headers.h(272,13): message : see declaration of 'Display::print_at'
+K:\King-Kong-Game\headers.h(250,1): error C2660: 'Display::print_at': function does not take 3 arguments
+K:\King-Kong-Game\headers.h(272,13): message : see declaration of 'Display::print_at'
+K:\King-Kong-Game\headers.h(257,1): error C2660: 'Display::print_at': function does not take 3 arguments
+K:\King-Kong-Game\headers.h(272,13): message : see declaration of 'Display::print_at'
+K:\King-Kong-Game\headers.h(239,26): error C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  Generating Code...
