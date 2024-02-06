@@ -1,33 +1,28 @@
-#include "Character.h"
-
-//object constructor
-Character::Character(int hp) {
-    hitPoints = hp;
-    currentY_pos = 15;
-}
+#include ".\Header Files\Character.h"
 
 //default constructor
+//names {"Amelia Earhart", "Maverick", "Dusty Crophopper", "Auntie Mabel and Pippin", "Orville and Wilbur Wright"}
 Character::Character(){
-    hitPoints = 20;
-    currentY_pos = 15;
+    name = "Amelia Earhart";
+    hitPoints = 10;
+    ammoCount = 5;
+    planeArt;
 }
 
 //set method for hit points.
-void Character::setHitPoints(int hp){
-    hitPoints= hp;
+void Character::SetHitPoints(int _hitPoints){
+    hitPoints = _hitPoints;
 }
 
 //get method for hit points.
-int Character::getHitPoints(){
+int Character::GetHitPoints(){
     return(hitPoints);
 }
 
-//set method for current YPos
-void Character::setCurrentYPos(int yPos){
-    currentY_pos = yPos;
+int Character::GetAmmoCount(){
+    return(ammoCount);
 }
 
-//get method for current YPos
-int Character::getCurrentYPos(){
-    return currentY_pos;
+void Character::SetAmmoCount(int _ammoCount){
+    ammoCount = _ammoCount;
 }

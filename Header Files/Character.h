@@ -3,24 +3,23 @@
 #define CHARACTER_H
 
 #include <iostream>
-#include <Windows.h>
-#include <vector>
-#include "Setup.h"
-#include "Projectile.h"
+class Character{
 
-class Character : public Setup, public Projectile {
+    private:
+        std::string name;
+        int hitPoints;
+        int ammoCount;
 
-private:
-    int hitPoints;
-    int currentY_pos;
+        //TODO- Find better/easier way of displaying plane. Container?
+        const char planeArt[68] = R"(      __|__
+                                    --@--@--(_)--@--@--)";
 
-public:
-    Character(int hp);
-    Character();
-    void setHitPoints(int hp);
-    int getHitPoints();
-    void setCurrentYPos(int yPos);
-    int getCurrentYPos();
+    public:
+        Character();
+        int GetHitPoints();
+        void SetHitPoints(int _hitPoints);
+        int GetAmmoCount();
+        void SetAmmoCount(int _ammoCount);
 };
 
 #endif

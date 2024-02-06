@@ -32,8 +32,8 @@
 *.app
 
 # Deprecated/Archived Files
-*Deprecated/
+Deprecated/
 
-*.vs
-*.vscode
+.vs/
+.vscode/
 *.code-workspace
